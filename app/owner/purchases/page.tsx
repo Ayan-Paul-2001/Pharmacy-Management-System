@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerPurchases(){return <RolePlaceholder role="owner" title="Purchases" description="Create purchase orders, receive deliveries, and keep supplier invoices organized." cards={[["Purchase orders","/purchases","Create and track replenishment orders.","▱"],["Receiving","/purchases","Verify delivery quantities and update stock.","✓"],["Purchase returns","/purchases","Record damaged or incorrect products.","↩"]]}/>}

@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerCustomers(){return <RolePlaceholder role="owner" title="Customers" description="View customer profiles, purchase history, prescriptions, and loyalty activity." cards={[["Customer directory","/customers","Profiles, contacts, and account status.","♙"],["Loyalty program","/customers","Membership levels and reward point activity.","✦"],["Customer insights","/reports","Purchases, retention, and lifetime value.","⌁"]]}/>}

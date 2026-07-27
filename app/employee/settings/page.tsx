@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function EmployeeSettings(){return <RolePlaceholder role="employee" title="Settings" description="Manage your personal profile, sign-in security, and notification preferences." cards={[["My profile","/employee/settings","Contact details and account information.","♙"],["Security","/employee/settings","Password, sessions, and trusted devices.","⚙"],["Notifications","/employee/notifications","Choose which alerts you receive.","◉"]]}/>}

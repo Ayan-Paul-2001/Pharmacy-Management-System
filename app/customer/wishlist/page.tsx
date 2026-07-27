@@ -1,0 +1,2 @@
+import { RoleShell, RoleIntro, PortalCard } from '@/components/RoleShell'
+export default function CustomerWishlist(){return <RoleShell role="customer" title="Wishlist"><RoleIntro kicker="Customer room · Saved items" title="Your wishlist" description="Keep the products you want to come back to close at hand." action="Browse medicines"/><div className="portal-grid"><PortalCard href="/inventory" icon="♡" title="8 saved medicines" description="Your saved items are available while stock lasts." metric="3 currently on sale"/></div></RoleShell>}

@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Next.js
+.next/
+out/
+.vercel/
+
+# NestJS / TypeScript build output
+backend/dist/
+dist/
+coverage/
+.cache/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime uploads and local data
+backend/uploads/
+backend/storage/
+*.sqlite
+*.sqlite3
+
+# Test and tooling output
+.nyc_output/
+playwright-report/
+test-results/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo

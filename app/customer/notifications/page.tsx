@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function CustomerNotifications(){return <RolePlaceholder role="customer" title="Notifications" description="Follow order updates, prescription reviews, and offers from your pharmacy." cards={[["Order updates","/customer/orders","Your active delivery and pickup notifications.","◌"],["Prescription updates","/customer/prescriptions","Approval and renewal reminders.","▤"],["Offers & rewards","/customer/wishlist","Gold member points and special offers.","✦"]]}/>}

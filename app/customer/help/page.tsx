@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function CustomerHelp(){return <RolePlaceholder role="customer" title="Help center" description="Find answers about ordering, prescriptions, payments, and delivery." cards={[["Ordering medicines","/customer/shop","How to browse and place an order.","⌕"],["Prescription help","/customer/prescriptions","Upload and manage prescription records.","▤"],["Contact pharmacy","/customer/help","Talk to the Northstar Pharmacy team.","♧"]]}/>}

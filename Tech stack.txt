@@ -1,0 +1,56 @@
+Tech stack:
+
+Frontend: Nextjs
+Backend: Nestjs
+Database: Mongodb
+Authentication: Firebase, Fingerprintjs, webauthn
+
+Motion → Entire application (page transitions, cards, modals, menus, forms)
+GSAP → Landing page,  hero section and any advanced marketing animations     (background Drug picture will be professional Animation)
+CSS/Tailwind transitions → Hover states, buttons, inputs
+
+
+Aim for:
+
+Landing page: Rich, engaging animations.
+Dashboard: Smooth, professional micro-interactions.
+Medicine/Product pages: Moderate, purposeful animations.
+Billing/POS: Minimal animations for maximum efficiency.
+
+Make it professionally..
+
+
+
+### Pharmacy Management System – Complete Use Case and Feature Description
+
+The Pharmacy Management System is a role-based web application designed to automate and manage the daily operations of a pharmacy through three primary user roles: **Owner**, **Employee**, and **Customer**. The system begins with secure authentication, allowing users to register (customers), log in, log out, recover forgotten passwords, update their profiles, and securely manage their accounts. The Owner has complete administrative control over the system, including creating, updating, disabling, and deleting employee accounts, managing customer accounts, assigning roles and permissions, configuring pharmacy information, tax settings, currency, invoice templates, business hours, and security settings. Every significant action performed within the system is recorded in an audit log to ensure accountability and traceability.
+
+The Owner accesses a comprehensive dashboard displaying real-time business information, including today's, weekly, monthly, and yearly sales, purchase summaries, profit and loss, inventory value, low-stock medicines, out-of-stock medicines, medicines nearing expiration, expired medicines, supplier dues, pending online orders, customer statistics, employee statistics, best-selling medicines, recent transactions, and system notifications. Employees receive an operational dashboard showing today's sales, available medicines, pending prescription verifications, low-stock alerts, recent transactions, and assigned tasks, while Customers have a personalized dashboard containing their profile information, order history, prescription history, invoices, saved addresses, wishlist, notifications, and loyalty information if applicable.
+
+The medicine management module enables Owners to maintain a complete medicine database by adding, editing, deleting, searching, and categorizing medicines. Each medicine record stores detailed information such as Medicine ID, Barcode, Medicine Name, Generic Name, Brand Name, Manufacturer, Category, Description, Batch Number, Purchase Price, Selling Price, Discount, Tax, Quantity in Stock, Reorder Level, Manufacturing Date, Expiry Date, Supplier Information, Storage Conditions, Prescription Requirement Status, and Medicine Image. Medicines can be searched instantly using their name, generic name, barcode, batch number, manufacturer, or category, enabling employees to quickly locate products during sales or inventory operations.
+
+Inventory management automatically tracks all stock movement throughout the pharmacy. Whenever medicines are purchased, sold, returned, damaged, or manually adjusted, stock quantities are updated instantly. The system maintains complete inventory history, supports multiple batches of the same medicine, performs stock adjustments after audits, records damaged or expired medicines separately, manages returned products, generates low-stock alerts when quantities fall below reorder levels, and provides notifications for medicines approaching expiration or already expired. Inventory reports display current stock, historical stock movement, stock valuation, expiry analysis, damaged stock, and reorder recommendations.
+
+Supplier management enables the Owner to register and maintain supplier information, including supplier name, company, phone number, email, address, payment terms, trade license information, and contact details. The system records every purchase transaction associated with each supplier, tracks supplier balances, payment history, outstanding dues, purchase invoices, and purchase returns. Purchase management allows the Owner to create purchase orders, receive medicine deliveries, verify received quantities, update stock automatically, generate purchase invoices, record purchase returns for damaged or incorrect items, and maintain complete purchase history for future reference.
+
+The sales management module functions as a Point of Sale (POS) system where Employees and Owners can quickly search medicines, scan barcodes, add medicines to a shopping cart, adjust quantities, apply discounts, calculate taxes, process multiple payment methods, generate invoices, print receipts, email invoices, process refunds, handle medicine returns, and automatically deduct sold quantities from inventory. Each sales invoice contains invoice number, customer information, medicine details, quantities, unit prices, discounts, taxes, payment method, transaction date, and grand total. Sales history is permanently stored and searchable by invoice number, customer, employee, or date.
+
+Customer management allows Owners and Employees to create and maintain customer profiles containing name, phone number, email, address, date of birth, gender, purchase history, prescription history, loyalty information, and account status. Customers can register themselves, update their profiles, review previous purchases, download invoices, view prescription records, monitor order history, manage saved addresses, and receive notifications regarding orders and prescriptions.
+
+Employee management enables the Owner to recruit and administer pharmacy staff by storing employee information including name, contact details, role, salary, joining date, attendance records, work schedules, and account status. Owners can activate or deactivate employee accounts, assign permissions based on responsibilities, monitor employee performance through sales records and activity logs, and review attendance and shift history.
+
+Prescription management provides support for prescription-based medicine sales. Customers can upload prescription images while placing orders or requesting medicines. Employees review uploaded prescriptions, verify their authenticity, approve or reject requests, associate approved prescriptions with specific medicines, maintain prescription history, and ensure prescription-only medicines cannot be sold without proper authorization. Prescription documents remain securely stored for future reference and regulatory compliance.
+
+The system also supports online ordering, allowing customers to browse available medicines, search products by category, brand, or generic name, view medicine details, add items to their shopping cart, modify quantities, upload prescriptions when required, proceed through checkout, select payment methods, place orders, track order status, cancel eligible orders, and review completed purchases. Owners and Employees receive notifications of new orders, verify stock availability, approve or reject requests, prepare orders for delivery or pickup, update order status, and maintain complete order history.
+
+Payment management supports multiple payment methods including cash, debit or credit cards, mobile banking services such as bKash, Nagad, and Rocket, and bank transfers. The system records payment status, maintains complete transaction history, processes refunds, manages outstanding balances, tracks supplier payments, and generates payment reports for accounting purposes.
+
+The reporting module provides comprehensive analytical reports to assist business decision-making. Owners can generate daily, weekly, monthly, yearly, or custom-date reports covering sales, purchases, inventory, profit and loss, supplier transactions, customer purchases, medicine sales, fast-moving medicines, slow-moving medicines, expired medicines, damaged stock, employee performance, payment summaries, and financial statistics. Reports can be filtered, searched, sorted, printed, or exported for business analysis and record keeping.
+
+A notification system continuously informs users of important events throughout the pharmacy. Owners and Employees receive alerts regarding low stock, out-of-stock medicines, medicines approaching expiry, expired medicines, new customer registrations, new online orders, pending prescription approvals, supplier payment due dates, completed purchases, completed sales, successful payments, and other operational events through in-application notifications, with optional email or SMS support.
+
+The system includes a powerful search capability that enables users to locate medicines, invoices, customers, suppliers, prescriptions, employees, purchase orders, sales records, and inventory transactions using keywords, IDs, barcodes, batch numbers, phone numbers, dates, or categories. Barcode generation, barcode printing, barcode scanning, and QR code support further improve inventory control and billing speed by minimizing manual entry errors.
+
+Promotional and pricing features include fixed discounts, percentage discounts, promotional offers, coupons, and membership discounts. During sales, the system automatically calculates applicable discounts and taxes while ensuring accurate billing. If enabled by the pharmacy, customers can participate in a loyalty program where purchases accumulate reward points that can later be redeemed for eligible discounts, with membership levels such as Bronze, Silver, and Gold based on purchasing activity.
+
+To ensure security and operational reliability, the system implements role-based access control so that Owners, Employees, and Customers can access only authorized features. Passwords are securely encrypted, user sessions are protected, and defenses against SQL injection, Cross-Site Scripting (XSS), and Cross-Site Request Forgery (CSRF) attacks are incorporated. Every login, logout, profile update, inventory modification, medicine update, purchase, sale, deletion, approval, and administrative action is recorded in an audit log. The system also supports automatic and manual database backup, database restoration, error recovery, high availability, responsive user interfaces for desktop and mobile devices, efficient performance under concurrent usage, scalable architecture for future expansion, and modular design to simplify maintenance and future enhancements.

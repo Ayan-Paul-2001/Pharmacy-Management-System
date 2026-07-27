@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function EmployeeTasks(){return <RolePlaceholder role="employee" title="My tasks" description="Stay on top of assigned work during your pharmacy shift." cards={[["Prescription reviews","/employee/prescriptions","Complete pending verification requests.","▤"],["Shelf replenishment","/employee/inventory","Restock the items flagged by the system.","◇"],["Order packing","/employee/orders","Prepare online orders for pickup and delivery.","✓"]]}/>}

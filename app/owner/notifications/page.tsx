@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerNotifications(){return <RolePlaceholder role="owner" title="Notifications" description="Review low stock, expiry, orders, payments, and important system events." cards={[["Needs attention","/notifications","Alerts that require an owner decision.","!"],["All activity","/notifications","Recent events across the pharmacy.","◉"],["Notification rules","/settings","Choose what your team receives.","⚙"]]}/>}

@@ -1,0 +1,6 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { HydratedDocument } from 'mongoose'
+export type MedicineDocument = HydratedDocument<Medicine>
+@Schema({ timestamps: true })
+export class Medicine { @Prop({ required: true, unique: true, index: true }) medicineId!: string; @Prop({ index: true }) barcode?: string; @Prop({ required: true, index: true }) name!: string; @Prop({ index: true }) genericName?: string; @Prop() brandName?: string; @Prop() manufacturer?: string; @Prop({ index: true }) category!: string; @Prop() description?: string; @Prop({ required: true, min: 0 }) purchasePrice!: number; @Prop({ required: true, min: 0 }) sellingPrice!: number; @Prop({ default: 0, min: 0 }) discount!: number; @Prop({ default: 0, min: 0 }) tax!: number; @Prop({ required: true, min: 0 }) quantityInStock!: number; @Prop({ default: 10, min: 0 }) reorderLevel!: number; @Prop({ required: true }) expiryDate!: Date; @Prop() manufacturingDate?: Date; @Prop() supplierId?: string; @Prop({ default: false }) prescriptionRequired!: boolean; @Prop() imageUrl?: string; @Prop({ required: true, index: true }) pharmacyId!: string }
+export const MedicineSchema = SchemaFactory.createForClass(Medicine)

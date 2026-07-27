@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function CustomerProfile(){return <RolePlaceholder role="customer" title="Profile" description="Keep your contact details, addresses, and account preferences up to date." cards={[["Personal information","/customer/profile","Name, phone, email, and date of birth.","♙"],["Saved addresses","/customer/profile","Manage delivery and pickup details.","⌂"],["Account security","/customer/profile","Password, sessions, and trusted devices.","⚙"]]}/>}

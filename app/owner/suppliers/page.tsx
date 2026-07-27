@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerSuppliers(){return <RolePlaceholder role="owner" title="Suppliers" description="Manage supplier contacts, trade terms, balances, and purchase history." cards={[["Supplier directory","/suppliers","Contacts, licenses, terms, and account status.","⌁"],["Outstanding dues","/suppliers","Review balances and payment due dates.","$"],["Payment history","/reports","Track supplier payments and purchase returns.","▤"]]}/>}

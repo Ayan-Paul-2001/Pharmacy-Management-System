@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerSettings(){return <RolePlaceholder role="owner" title="Settings" description="Configure pharmacy information, tax, security, roles, invoices, and backups." cards={[["Pharmacy profile","/settings","Name, address, business hours, and currency.","⌂"],["Roles & permissions","/settings","Control what each role can access.","♧"],["Security & backups","/settings","Audit logs, backups, and account protection.","⚙"]]}/>}

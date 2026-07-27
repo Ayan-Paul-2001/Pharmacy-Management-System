@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function CustomerPrescriptionShop(){return <RolePlaceholder role="customer" title="Prescription upload" description="Upload a clear prescription so the pharmacy team can verify your order." cards={[["Upload image or PDF","/customer/prescriptions","Accepted formats: JPG, PNG, or PDF.","＋"],["Active records","/customer/prescriptions","Use an existing prescription on a new order.","▤"]]}/>}

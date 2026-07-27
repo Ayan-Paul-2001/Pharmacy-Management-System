@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function EmployeeNotifications(){return <RolePlaceholder role="employee" title="Notifications" description="See stock alerts, new orders, prescription requests, and assigned work." cards={[["Action needed","/employee/tasks","Your alerts and assigned tasks.","!"],["Order updates","/employee/orders","New and changed online orders.","◌"],["Team updates","/employee/tasks","Messages from pharmacy management.","◉"]]}/>}

@@ -1,0 +1,2 @@
+import { RolePlaceholder } from '@/components/RolePlaceholder'
+export default function OwnerPrescriptions(){return <RolePlaceholder role="owner" title="Prescription approvals" description="Monitor prescription-only medicine compliance and review activity across your pharmacy." cards={[["Pending reviews","/prescriptions","Requests waiting for pharmacist verification.","▤"],["Approval history","/prescriptions","Approved and rejected records by date.","✓"],["Compliance settings","/owner/settings","Configure prescription requirements and audit retention.","⚙"]]}/>}
