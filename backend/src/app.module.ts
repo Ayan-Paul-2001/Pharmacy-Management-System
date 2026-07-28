@@ -13,6 +13,30 @@ import { SuppliersModule } from './modules/suppliers/suppliers.module'
 import { AuditModule } from './modules/audit/audit.module'
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), MongooseModule.forRootAsync({ imports: [ConfigModule], inject: [ConfigService], useFactory: (config: ConfigService) => ({ uri: config.getOrThrow<string>('MONGODB_URI') }) }), AuthModule, UsersModule, MedicinesModule, InventoryModule, SalesModule, OrdersModule, PrescriptionsModule, CustomersModule, SuppliersModule, AuditModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const uri = config.get<string>('MONGODB_URI', 'mongodb://127.0.0.1:27017/mediflow')
+        return {
+          uri,
+          serverSelectionTimeoutMS: 5000,
+          family: 4,
+        }
+      },
+    }),
+    AuthModule,
+    UsersModule,
+    MedicinesModule,
+    InventoryModule,
+    SalesModule,
+    OrdersModule,
+    PrescriptionsModule,
+    CustomersModule,
+    SuppliersModule,
+    AuditModule,
+  ],
 })
 export class AppModule {}

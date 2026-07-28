@@ -1,2 +1,5 @@
-import { RolePlaceholder } from '@/components/RolePlaceholder'
-export default function EmployeeInventory(){return <RolePlaceholder role="employee" title="Stock lookup" description="Quickly find medicine availability, batch information, and expiry dates." cards={[["Search catalog","/inventory","Find a medicine by name, barcode, or generic.","◇"],["Low-stock alerts","/inventory","See what needs replenishment on the shelf.","!"],["Stock adjustment","/inventory","Report damaged, missing, or returned stock.","↗"]]}/>}
+import InventoryPage from '@/app/inventory/page'
+
+export default function EmployeeInventoryPage() {
+  return <InventoryPage />
+}

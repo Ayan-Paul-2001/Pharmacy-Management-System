@@ -1,2 +1,5 @@
-import { RolePlaceholder } from '@/components/RolePlaceholder'
-export default function OwnerSales(){return <RolePlaceholder role="owner" title="Sales & POS" description="Review transactions, invoices, refunds, and payment methods across the pharmacy." cards={[["Today's sales","/pos","Live register totals and current transactions.","＋"],["Sales history","/reports","Search invoices by customer, employee, or date.","⌁"],["Returns & refunds","/reports","Process eligible returns and review refund history.","↩"]]}/>}
+import POSPage from '@/app/pos/page'
+
+export default function OwnerSalesPage() {
+  return <POSPage />
+}

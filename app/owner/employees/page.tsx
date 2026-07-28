@@ -1,2 +1,5 @@
-import { RolePlaceholder } from '@/components/RolePlaceholder'
-export default function OwnerEmployees(){return <RolePlaceholder role="owner" title="Employees" description="Manage staff roles, permissions, schedules, attendance, and performance." cards={[["Team directory","/employees","Staff profiles, roles, and account status.","♧"],["Schedules & shifts","/employees","See coverage and assign work schedules.","◷"],["Activity log","/reports","Review employee sales and system activity.","⌁"]]}/>}
+import EmployeesPage from '@/app/employees/page'
+
+export default function OwnerEmployeesPage() {
+  return <EmployeesPage />
+}

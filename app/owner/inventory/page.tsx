@@ -1,2 +1,5 @@
-import { RoleShell, RoleIntro, PortalCard } from '@/components/RoleShell'
-export default function OwnerInventory(){return <RoleShell role="owner" title="Inventory"><RoleIntro kicker="Owner room · Inventory control" title="Inventory" description="Manage the full medicine catalog, stock movement, expiry, and reorder levels." action="Add medicine"/><div className="portal-grid"><PortalCard href="/inventory" icon="◇" title="Medicine catalog" description="Search and manage all medicines, batches, pricing, and tax." metric="1,248 medicines"/><PortalCard href="/owner/inventory/low-stock" icon="!" title="Low stock" description="Review items below their reorder level and create purchase orders." metric="42 items need attention"/><PortalCard href="/owner/inventory/expiry" icon="◷" title="Expiry center" description="See medicines approaching expiry and record write-offs." metric="18 expiring soon"/><PortalCard href="/owner/inventory/movements" icon="↗" title="Stock movements" description="Audit every purchase, sale, return, damage, and adjustment." metric="428 movements this month"/></div></RoleShell>}
+import InventoryPage from '@/app/inventory/page'
+
+export default function OwnerInventoryPage() {
+  return <InventoryPage />
+}

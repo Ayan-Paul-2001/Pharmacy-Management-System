@@ -1,2 +1,5 @@
-import { RolePlaceholder } from '@/components/RolePlaceholder'
-export default function EmployeeCustomers(){return <RolePlaceholder role="employee" title="Customers" description="Find customer accounts, purchase history, and prescription records at the counter." cards={[["Find a customer","/customers","Search by name, phone, or email.","♙"],["Create customer","/customers","Add a profile during checkout.","＋"],["Recent customers","/customers","See who visited the pharmacy recently.","◌"]]}/>}
+import CustomersPage from '@/app/customers/page'
+
+export default function EmployeeCustomersPage() {
+  return <CustomersPage />
+}

@@ -1,2 +1,5 @@
-import { RoleShell, RoleIntro, PortalCard } from '@/components/RoleShell'
-export default function EmployeeOrders(){return <RoleShell role="employee" title="Orders"><RoleIntro kicker="Employee room · Fulfillment" title="Order fulfillment" description="Prepare pickup and delivery orders, and keep customers updated at every step." action="Open next order"/><div className="portal-grid"><PortalCard href="/orders" icon="◌" title="New orders" description="Orders that have just been submitted online." metric="18 new"/><PortalCard href="/orders" icon="▤" title="Preparing" description="Orders being picked, packed, and checked." metric="24 in progress"/><PortalCard href="/orders" icon="✓" title="Ready for pickup" description="Notify customers that their order is ready." metric="11 ready"/></div></RoleShell>}
+import OrdersPage from '@/app/orders/page'
+
+export default function EmployeeOrdersPage() {
+  return <OrdersPage />
+}

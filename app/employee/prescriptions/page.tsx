@@ -1,2 +1,5 @@
-import { RoleShell, RoleIntro, PortalCard } from '@/components/RoleShell'
-export default function EmployeePrescriptions(){return <RoleShell role="employee" title="Prescriptions"><RoleIntro kicker="Employee room · Clinical queue" title="Prescription review" description="Verify uploaded prescriptions before approving prescription-only medicine sales." action="Review next"/><div className="portal-grid"><PortalCard href="/prescriptions" icon="▤" title="Pending review" description="Requests that need authenticity and medicine verification." metric="12 pending"/><PortalCard href="/prescriptions" icon="✓" title="Approved today" description="Prescriptions approved during your current shift." metric="24 approved"/><PortalCard href="/prescriptions" icon="◷" title="Expiring records" description="Prescriptions that need a renewal from the customer." metric="7 expiring soon"/></div></RoleShell>}
+import PrescriptionsPage from '@/app/prescriptions/page'
+
+export default function EmployeePrescriptionsPage() {
+  return <PrescriptionsPage />
+}

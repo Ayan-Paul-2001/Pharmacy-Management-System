@@ -1,3 +1,11 @@
+import * as dns from 'dns'
+// Set public DNS servers to resolve MongoDB Atlas SRV records on Windows
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1'])
+} catch (e) {
+  // fallback if system restricts dns.setServers
+}
+
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'

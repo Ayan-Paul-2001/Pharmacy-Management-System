@@ -1,2 +1,5 @@
-import { RoleShell, RoleIntro, PortalCard } from '@/components/RoleShell'
-export default function OwnerReports(){return <RoleShell role="owner" title="Reports"><RoleIntro kicker="Owner room · Business intelligence" title="Reports" description="Make better decisions with sales, inventory, finance, and team performance data." action="Create report"/><div className="portal-grid"><PortalCard href="/reports" icon="⌁" title="Sales & revenue" description="Daily, weekly, monthly, and custom period performance." metric="$12,840 today"/><PortalCard href="/reports" icon="▥" title="Profit & loss" description="Understand margin, costs, and operating profit." metric="28.6% gross margin"/><PortalCard href="/reports" icon="◇" title="Inventory analytics" description="Valuation, fast movers, expiry, and reorder recommendations." metric="$84,290 stock value"/><PortalCard href="/reports" icon="♧" title="Team performance" description="Sales, attendance, shifts, and activity by employee." metric="14 team members"/></div></RoleShell>}
+import ReportsPage from '@/app/reports/page'
+
+export default function OwnerReportsPage() {
+  return <ReportsPage />
+}
