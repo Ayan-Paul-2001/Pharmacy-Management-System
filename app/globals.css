@@ -1102,6 +1102,19 @@ body {
   gap: 24px;
 }
 
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-center-gap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 /* Top Bar Green */
 .lazz-top-bar {
   background: var(--lazz-green);
@@ -1381,6 +1394,45 @@ body {
   height: 380px;
   background: #091220;
   overflow: hidden;
+}
+
+.lazz-hero-banner-section.auth-layout {
+  min-height: 560px;
+  height: auto;
+  padding: 40px 0;
+  display: flex;
+  align-items: center;
+}
+
+.hero-auth-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  align-items: center;
+  width: 100%;
+}
+
+.banner-features-pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.banner-features-pill span {
+  font: 600 11px 'DM Sans';
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: #e2e8f0;
+}
+
+@media (max-width: 900px) {
+  .hero-auth-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 .lazz-hero-overlay-content {
@@ -1952,7 +2004,790 @@ body {
   }
 }
 
+/* =====================================================================
+   ATB — ANIMEJS.COM STICKY SCROLL PIN PATTERN
+   Outer .atb-scroller is 300vh tall → gives scroll room
+   Inner .atb-sticky stays pinned at top:0 while you scroll through it
+   Timeline syncs 0→1 as you scroll from enter to leave
+   ===================================================================== */
+
+/* Outer tall container — the scroll distance */
+.atb-scroller {
+  position: relative;
+  height: 300vh;
+  background: #080e1a;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Sticky inner panel — stays locked in viewport */
+.atb-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 0 0;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.atb-header {
+  text-align: center;
+  max-width: 640px;
+  padding: 0 20px;
+  z-index: 10;
+  position: relative;
+}
+
+.atb-tag-pill {
+  display: inline-block;
+  font: 700 10px 'DM Mono', monospace;
+  color: #10b981;
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.3);
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.atb-title {
+  font: 700 32px/1.2 'DM Sans', sans-serif;
+  color: #f8fafc;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.atb-sub {
+  font: 400 14px/1.65 'DM Sans', sans-serif;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Stage (the animated canvas) ── */
+.atb-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  flex: 1;
+  margin-top: 10px;
+}
+
+/* SVG beam layer */
+.atb-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Central Capsule ── */
+.atb-capsule-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.atb-core-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle,
+    rgba(16,185,129,0.5) 0%,
+    rgba(59,130,246,0.2) 55%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.atb-half {
+  width: 128px;
+  height: 80px;
+  position: relative;
+  will-change: transform;
+  flex-shrink: 0;
+}
+
+.atb-cap-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.atb-cap-emerald {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+  border-radius: 40px 0 0 40px;
+  border-right: 3px solid rgba(255,255,255,0.35);
+  box-shadow: -12px 18px 36px rgba(16,185,129,0.5), 0 0 60px rgba(16,185,129,0.2);
+}
+
+.atb-cap-blue {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%);
+  border-radius: 0 40px 40px 0;
+  border-left: 3px solid rgba(255,255,255,0.35);
+  box-shadow: 12px 18px 36px rgba(59,130,246,0.5), 0 0 60px rgba(59,130,246,0.2);
+}
+
+.atb-sheen {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  right: 10px;
+  height: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.65) 0%, transparent 100%);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.atb-rim {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.atb-brand {
+  font: 900 13px 'DM Mono', monospace;
+  color: #fff;
+  letter-spacing: 2.5px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Particles ── */
+.atb-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.atb-particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 10px currentColor;
+  will-change: transform, opacity;
+}
+
+/* ── Synthesis Badge ── */
+.atb-synthesis-badge {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.5);
+  background: rgba(8, 14, 26, 0.92);
+  border: 1px solid rgba(16,185,129,0.45);
+  padding: 7px 16px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 10px 'DM Mono', monospace;
+  color: #10b981;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  will-change: transform, opacity;
+  z-index: 8;
+}
+
+.atb-badge-ring {
+  position: absolute;
+  inset: -5px;
+  border: 1px dashed rgba(16,185,129,0.35);
+  border-radius: 26px;
+  animation: atbBadgePulse 2.4s infinite;
+}
+
+@keyframes atbBadgePulse {
+  0%   { transform: scale(0.94); opacity: 0.75; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+
+/* ── Feature Cards Layer ── */
+.atb-cards-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.atb-option-card {
+  position: absolute;
+  width: 290px;
+  background: rgba(13, 20, 38, 0.88);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+  will-change: transform, opacity;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.atb-option-card:hover {
+  border-color: rgba(255,255,255,0.22);
+  box-shadow: 0 22px 50px rgba(0,0,0,0.6);
+}
+
+/* Card positions — forming a 2-column layout around the capsule */
+.atb-card-1 { top:  4%;  left:  2%; }
+.atb-card-2 { top:  4%;  right: 2%; }
+.atb-card-3 { top: 36%;  left:  0%; }
+.atb-card-4 { top: 36%;  right: 0%; }
+.atb-card-5 { bottom: 3%; left:  12%; }
+.atb-card-6 { bottom: 3%; right: 12%; }
+
+.atb-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.atb-icon-ring {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atb-card-badge {
+  font: 700 10px 'DM Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.atb-card-title {
+  font: 700 15px 'DM Sans', sans-serif;
+  color: #f1f5f9;
+  margin: 0 0 4px;
+}
+
+.atb-card-sub {
+  font: 400 12px/1.5 'DM Sans', sans-serif;
+  color: #64748b;
+  margin: 0 0 14px;
+}
+
+.atb-card-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 600 12px 'DM Sans', sans-serif;
+  color: #38bdf8;
+  cursor: pointer;
+}
+
+.anime-pharma-hero-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.anime-svg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.anime-hero-floating-elements {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-anime-capsule {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 27, 47, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(16px);
+  padding: 6px 14px;
+  border-radius: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+}
+
+.cap-pos-1 {
+  top: 18%;
+  left: 8%;
+}
+
+.cap-pos-2 {
+  bottom: 20%;
+  right: 8%;
+}
+
+.capsule-body {
+  display: flex;
+  align-items: center;
+}
+
+.cap-half {
+  width: 14px;
+  height: 14px;
+}
+
+.c-emerald {
+  background: #10b981;
+  border-radius: 8px 0 0 8px;
+}
+
+.c-blue {
+  background: #3b82f6;
+  border-radius: 0 8px 8px 0;
+}
+
+.c-purple {
+  background: #8b5cf6;
+  border-radius: 8px 0 0 8px;
+}
+
+.c-cyan {
+  background: #06b6d4;
+  border-radius: 0 8px 8px 0;
+}
+
+.capsule-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 11px 'DM Sans', sans-serif;
+  color: #e2e8f0;
+}
+
+.hero-glass-pill {
+  position: absolute;
+  background: rgba(15, 27, 47, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 12px 'DM Sans', sans-serif;
+  color: #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.b-pos-1 {
+  top: 14%;
+  right: 14%;
+}
+
+.b-pos-2 {
+  bottom: 16%;
+  left: 14%;
+}
+
+.icon-emerald {
+  color: #10b981;
+}
+
+.icon-blue {
+  color: #3b82f6;
+}
+
+.hero-pulse-ring {
+  position: absolute;
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.r1 {
+  top: 15%;
+  left: 10%;
+  width: 280px;
+  height: 280px;
+}
+
+.r2 {
+  bottom: 12%;
+  right: 12%;
+  width: 320px;
+  height: 320px;
+}
+.anime-pharma-hero-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.anime-graphics-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Floating 3D Capsules & Pills */
+.anime-pill-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  border-radius: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 4px;
+}
+
+.capsule-1 {
+  top: 18%;
+  left: 8%;
+  transform: rotate(-15deg);
+}
+
+.capsule-2 {
+  bottom: 22%;
+  right: 10%;
+  transform: rotate(20deg);
+}
+
+.capsule-half {
+  width: 32px;
+  height: 22px;
+}
+
+.cap-blue {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 20px 0 0 20px;
+}
+
+.cap-mint {
+  background: linear-gradient(135deg, #34d399, #059669);
+  border-radius: 0 20px 20px 0;
+}
+
+.cap-purple {
+  background: linear-gradient(135deg, #a855f7, #6b21a8);
+  border-radius: 20px 0 0 20px;
+}
+
+.cap-gold {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  border-radius: 0 20px 20px 0;
+}
+
+.pill-brand-text {
+  font: 700 10px 'DM Mono', monospace;
+  color: #fff;
+  padding: 0 8px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.tablet-round {
+  top: 65%;
+  left: 12%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.round-pill-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.pill-score-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba(0,0,0,0.15);
+}
+
+.pill-stamp {
+  font-size: 14px;
+  color: #3b82f6;
+  z-index: 2;
+}
+
+/* Rotating Medical Cross */
+.anime-medical-cross {
+  position: absolute;
+  top: 12%;
+  right: 12%;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.cross-arm {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(69, 224, 176, 0.4), rgba(77, 142, 247, 0.4));
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cross-arm.h {
+  width: 70px;
+  height: 22px;
+}
+
+.cross-arm.v {
+  width: 22px;
+  height: 70px;
+}
+
+.cross-ring {
+  width: 110px;
+  height: 110px;
+  border: 1px dashed rgba(77, 142, 247, 0.35);
+  border-radius: 50%;
+}
+
+/* Molecular Benzene Ring Nodes */
+.anime-molecule-structure {
+  position: absolute;
+  bottom: 18%;
+  left: 20%;
+  width: 160px;
+  height: 140px;
+}
+
+.anime-molecule-node {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #45e0b0;
+  border: 2px solid #fff;
+  box-shadow: 0 0 15px rgba(69, 224, 176, 0.8);
+}
+
+.n1 { top: 0; left: 50px; }
+.n2 { top: 30px; left: 100px; }
+.n3 { top: 80px; left: 100px; }
+.n4 { top: 110px; left: 50px; }
+.n5 { top: 80px; left: 0; }
+.n6 { top: 30px; left: 0; }
+
+.bond-line {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  height: 2px;
+  transform-origin: 0 0;
+}
+
+.b1 { top: 8px; left: 58px; width: 45px; transform: rotate(32deg); }
+.b2 { top: 38px; left: 108px; width: 50px; transform: rotate(90deg); }
+.b3 { top: 88px; left: 108px; width: 45px; transform: rotate(148deg); }
+
+.badge-top-left {
+  top: 15%;
+  left: 18%;
+}
+
+.badge-bottom-right {
+  bottom: 14%;
+  right: 18%;
+}
+
+/* --- GSAP HERO ANIMATED BACKDROP STYLES --- */
+.gsap-hero-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-bg-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  filter: brightness(0.7) contrast(1.1);
+}
+
+.hero-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(9, 18, 32, 0.3) 0%, rgba(9, 18, 32, 0.9) 80%),
+              linear-gradient(to bottom, rgba(9, 18, 32, 0.7) 0%, rgba(9, 18, 32, 0.95) 100%);
+}
+
+.hero-light-sweep {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(77, 142, 247, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.parallax-layer-front {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-ring {
+  position: absolute;
+  top: 10%;
+  right: 8%;
+  width: 320px;
+  height: 320px;
+  border: 1px dashed rgba(77, 142, 247, 0.25);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.glowing-orb-1 {
+  position: absolute;
+  top: 15%;
+  left: 6%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(77, 142, 247, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(30px);
+}
+
+.glowing-orb-2 {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(69, 224, 176, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+.glass-badge {
+  position: absolute;
+  background: rgba(15, 27, 47, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 12px 'DM Sans', sans-serif;
+  color: #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.floating-pill-1 {
+  top: 18%;
+  left: 10%;
+}
+
+.floating-pill-2 {
+  bottom: 22%;
+  right: 12%;
+}
+
+.pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pill-dot.blue {
+  background: #4d8ef7;
+  box-shadow: 0 0 10px #4d8ef7;
+}
+
+.pill-dot.mint {
+  background: #45e0b0;
+  box-shadow: 0 0 10px #45e0b0;
+}
+
 /* --- UNIFIED AUTHENTICATION PORTAL STYLING --- */
+.lazz-hero-auth-section {
+  position: relative;
+  min-height: calc(100vh - 180px);
+  background: #091220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
 .unified-auth-page {
   min-height: 100vh;
   background: #091220;
@@ -1960,18 +2795,14 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 16px;
   font-family: 'DM Sans', sans-serif;
-  overflow-y: auto;
 }
 
 .auth-portal-wrapper {
   position: relative;
   z-index: 10;
   width: min(440px, 100%);
-  margin: auto 0;
+  margin: 0 auto;
 }
 
 .auth-portal-header {

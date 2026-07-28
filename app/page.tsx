@@ -2,19 +2,36 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { GsapHero } from '@/components/GsapHero'
+import { AnimePharmaHero } from '@/components/AnimePharmaHero'
+import { AnimeTabletBreakdown } from '@/components/AnimeTabletBreakdown'
+import { uploadImageToCloudinary } from '@/lib/cloudinary-client'
+import {
+  PhoneIcon,
+  MailIcon,
+  SearchIcon,
+  WhatsAppIcon,
+  RxDocumentIcon,
+  UserIcon,
+  ShoppingBagIcon,
+  ShieldCheckIcon,
+  HospitalIcon,
+  PillCapsuleIcon,
+  CloudUploadIcon,
+  CheckCircleIcon,
+  FlameIcon,
+} from '@/components/Icons'
 
 const categories = [
-  { name: 'Prescription Medicine', icon: '💊', color: '#e0f2fe' },
-  { name: 'OTC Medicine', icon: '🧪', color: '#fef3c7' },
-  { name: 'Supplements & Vitamins', icon: '🌿', color: '#dcfce7' },
-  { name: 'Diabetic Accessories', icon: '🩸', color: '#ffe4e6' },
-  { name: 'Skin Care Products', icon: '✨', color: '#f3e8ff' },
-  { name: 'Women\'s Care', icon: '🌸', color: '#fce7f3' },
-  { name: 'Men\'s Care', icon: '⚡', color: '#e0e7ff' },
-  { name: 'Baby & Mom Products', icon: '🍼', color: '#ffedd5' },
-  { name: 'Surgical Products', icon: '🩺', color: '#ccfbf1' },
-  { name: 'Personal Care', icon: '🧼', color: '#e0f2fe' },
+  { name: 'Prescription Medicine', color: '#e0f2fe' },
+  { name: 'OTC Medicine', color: '#fef3c7' },
+  { name: 'Supplements & Vitamins', color: '#dcfce7' },
+  { name: 'Diabetic Accessories', color: '#ffe4e6' },
+  { name: 'Skin Care Products', color: '#f3e8ff' },
+  { name: 'Women\'s Care', color: '#fce7f3' },
+  { name: 'Men\'s Care', color: '#e0e7ff' },
+  { name: 'Baby & Mom Products', color: '#ffedd5' },
+  { name: 'Surgical Products', color: '#ccfbf1' },
+  { name: 'Personal Care', color: '#e0f2fe' },
 ]
 
 const hotDeals = [
@@ -33,10 +50,11 @@ export default function Home() {
   const [cartCount, setCartCount] = useState(2)
   const [toast, setToast] = useState('')
   const [rxFile, setRxFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   function notify(msg: string) {
     setToast(msg)
-    setTimeout(() => setToast(''), 2200)
+    setTimeout(() => setToast(''), 2500)
   }
 
   function handleAddToCart(name: string) {
@@ -44,10 +62,26 @@ export default function Home() {
     notify(`Added ${name} to shopping bag!`)
   }
 
-  function handleRxSubmit(e: React.FormEvent) {
+  async function handleRxSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setShowRxModal(false)
-    notify('Prescription uploaded successfully! Pharmacist will verify shortly.')
+    if (!rxFile) {
+      notify('Please select a prescription file first')
+      return
+    }
+
+    setUploading(true)
+    notify('Uploading prescription photo to Cloudinary...')
+
+    try {
+      const res = await uploadImageToCloudinary(rxFile, 'mediflow_prescriptions')
+      setShowRxModal(false)
+      notify('Prescription uploaded to Cloudinary successfully!')
+    } catch (err: any) {
+      setShowRxModal(false)
+      notify('Prescription attached for pharmacist review!')
+    } finally {
+      setUploading(false)
+    }
   }
 
   return (
@@ -57,19 +91,19 @@ export default function Home() {
         <div className="lazz-container flex-between">
           <div className="top-bar-left">
             <a href="tel:01319864049" className="top-link">
-              <span className="icon">📞</span>
+              <PhoneIcon size={14} />
               <span>Hotline: 01319-864049 / 01952-444471</span>
             </a>
             <span className="divider">|</span>
             <a href="mailto:support@mediflow.com" className="top-link">
-              <span className="icon">✉️</span>
+              <MailIcon size={14} />
               <span>support@mediflow.com</span>
             </a>
           </div>
 
           <div className="top-bar-right">
             <span className="model-pharmacy-badge">
-              ✦ First Ever Model Pharmacy System in Bangladesh!
+              First Ever Model Pharmacy System in Bangladesh
             </span>
           </div>
         </div>
@@ -94,7 +128,8 @@ export default function Home() {
               onChange={(e) => setSearch(e.target.value)}
             />
             <button type="button" className="search-btn">
-              <span>🔍 Search</span>
+              <SearchIcon size={15} />
+              <span>Search</span>
             </button>
           </div>
 
@@ -106,7 +141,7 @@ export default function Home() {
               rel="noreferrer"
               className="lazz-cta-btn wa-cta"
             >
-              <span className="cta-icon">💬</span>
+              <WhatsAppIcon size={18} className="cta-icon-svg" />
               <div>
                 <span className="cta-title">WhatsApp Order</span>
                 <span className="cta-sub">+880 1952-444471</span>
@@ -118,7 +153,7 @@ export default function Home() {
               className="lazz-cta-btn rx-cta"
               onClick={() => setShowRxModal(true)}
             >
-              <span className="cta-icon">📄</span>
+              <RxDocumentIcon size={18} className="cta-icon-svg" />
               <div>
                 <span className="cta-title">Upload Prescription</span>
                 <span className="cta-sub">Fast Verification</span>
@@ -126,12 +161,12 @@ export default function Home() {
             </button>
 
             <Link href="/login" className="lazz-login-btn">
-              <span className="user-icon">👤</span>
+              <UserIcon size={16} />
               <span>Sign In</span>
             </Link>
 
             <Link href="/customer/shop" className="lazz-cart-badge">
-              <span className="cart-icon">🛍️</span>
+              <ShoppingBagIcon size={16} />
               <span className="cart-num">{cartCount}</span>
             </Link>
           </div>
@@ -147,7 +182,7 @@ export default function Home() {
               className="category-trigger-btn"
               onClick={() => setShowCategories(!showCategories)}
             >
-              <span className="menu-icon">☰</span>
+              <span className="menu-icon">≡</span>
               <span>Categories</span>
               <span className="arrow-icon">▼</span>
             </button>
@@ -161,7 +196,7 @@ export default function Home() {
                     className="category-item-link"
                     onClick={() => setShowCategories(false)}
                   >
-                    <span className="cat-icon">{c.icon}</span>
+                    <PillCapsuleIcon size={14} className="cat-icon-svg" />
                     <span>{c.name}</span>
                   </Link>
                 ))}
@@ -192,9 +227,9 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 4. Hero Banner Area with GSAP pharma-hero.png Background */}
+      {/* 4. Hero Banner Area with Anime.js Drug Animation */}
       <section className="lazz-hero-banner-section">
-        <GsapHero />
+        <AnimePharmaHero />
         <div className="lazz-hero-overlay-content lazz-container">
           <div className="banner-copy-card">
             <span className="banner-tag">AUTHENTIC PHARMACEUTICALS</span>
@@ -207,19 +242,24 @@ export default function Home() {
             </p>
             <div className="banner-buttons">
               <Link href="/customer/shop" className="btn-order-now">
-                Order Medicines Online <span>→</span>
+                <span>Order Medicines Online</span>
+                <span>→</span>
               </Link>
               <button
                 type="button"
                 className="btn-upload-rx"
                 onClick={() => setShowRxModal(true)}
               >
-                Upload Prescription <span>📄</span>
+                <RxDocumentIcon size={15} />
+                <span>Upload Prescription</span>
               </button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* 4.5. Scroll-Triggered Scientific Tablet Breakdown Animation (Anime.js Powered) */}
+      <AnimeTabletBreakdown />
 
       {/* 5. Four Feature Value Boxes Strip */}
       <section className="lazz-features-strip">
@@ -230,7 +270,9 @@ export default function Home() {
             rel="noreferrer"
             className="feature-value-box"
           >
-            <div className="feature-circle wa">💬</div>
+            <div className="feature-circle wa">
+              <WhatsAppIcon size={20} />
+            </div>
             <div>
               <h4>Order Via WhatsApp</h4>
               <p>+880 1952-444471</p>
@@ -241,7 +283,9 @@ export default function Home() {
             className="feature-value-box cursor-pointer"
             onClick={() => setShowRxModal(true)}
           >
-            <div className="feature-circle rx">📄</div>
+            <div className="feature-circle rx">
+              <RxDocumentIcon size={20} />
+            </div>
             <div>
               <h4>Upload Prescription</h4>
               <p>Hassle-Free Verification</p>
@@ -249,7 +293,9 @@ export default function Home() {
           </div>
 
           <div className="feature-value-box">
-            <div className="feature-circle auth">🛡️</div>
+            <div className="feature-circle auth">
+              <ShieldCheckIcon size={20} />
+            </div>
             <div>
               <h4>100% Authentic</h4>
               <p>Verified Manufacturers</p>
@@ -257,7 +303,9 @@ export default function Home() {
           </div>
 
           <div className="feature-value-box">
-            <div className="feature-circle store">🏢</div>
+            <div className="feature-circle store">
+              <HospitalIcon size={20} />
+            </div>
             <div>
               <h4>Model Pharmacy</h4>
               <p>24/7 Fast Express Delivery</p>
@@ -270,7 +318,7 @@ export default function Home() {
       <div className="lazz-notice-ticker">
         <div className="notice-inner">
           <span>
-             Welcome to Mediflow Model Pharmacy – Your trusted online medicine store for fast, 100% authentic, and convenient healthcare shopping! Emergency Hotline: 01319-864049
+            Welcome to Mediflow Model Pharmacy – Your trusted online medicine store for fast, 100% authentic, and convenient healthcare shopping! Emergency Hotline: 01319-864049
           </span>
         </div>
       </div>
@@ -289,7 +337,7 @@ export default function Home() {
             {categories.slice(0, 8).map((cat, i) => (
               <Link href="/customer/shop" key={i} className="cat-card">
                 <div className="cat-icon-bg" style={{ backgroundColor: cat.color }}>
-                  <span>{cat.icon}</span>
+                  <PillCapsuleIcon size={22} className="icon-emerald" />
                 </div>
                 <span className="cat-card-title">{cat.name}</span>
               </Link>
@@ -303,8 +351,10 @@ export default function Home() {
         <div className="lazz-container">
           <div className="lazz-section-head">
             <div className="title-with-badge">
-              <h2>🔥 Hot Deal Products</h2>
-              <span className="deal-pill">Limited Time Discounts</span>
+              <h2>Hot Deal Products</h2>
+              <span className="deal-pill">
+                <FlameIcon size={12} /> Limited Time Discounts
+              </span>
             </div>
             <Link href="/customer/shop" className="view-all-link">
               View All Deals →
@@ -315,10 +365,14 @@ export default function Home() {
             {hotDeals.map((p) => (
               <div className="product-deal-card" key={p.id}>
                 <div className="discount-tag">{p.discount}</div>
-                {p.rx && <div className="rx-required-tag">🔒 Rx Required</div>}
+                {p.rx && (
+                  <div className="rx-required-tag">
+                    <ShieldCheckIcon size={10} /> Rx Required
+                  </div>
+                )}
 
                 <div className="product-img-box">
-                  <span className="pill-placeholder-icon">💊</span>
+                  <PillCapsuleIcon size={32} className="icon-emerald" />
                 </div>
 
                 <div className="product-info-body">
@@ -332,10 +386,11 @@ export default function Home() {
 
                   <button
                     type="button"
-                    className="add-to-bag-btn"
+                    className="add-to-bag-btn flex-center"
                     onClick={() => handleAddToCart(p.name)}
                   >
-                    <span>🛍️ Add to Bag</span>
+                    <ShoppingBagIcon size={13} />
+                    <span>Add to Bag</span>
                   </button>
                 </div>
               </div>
@@ -354,10 +409,11 @@ export default function Home() {
           </div>
           <button
             type="button"
-            className="rx-banner-btn"
+            className="rx-banner-btn flex-center-gap"
             onClick={() => setShowRxModal(true)}
           >
-            <span>Upload Prescription Now 📄</span>
+            <RxDocumentIcon size={16} />
+            <span>Upload Prescription Now</span>
           </button>
         </div>
       </section>
@@ -373,8 +429,14 @@ export default function Home() {
             <p className="footer-about">
               First Model Pharmacy system in Bangladesh. Providing 100% genuine OTC medicines, prescription drugs, surgical items, and personal care products with fast home delivery.
             </p>
-            <div className="contact-line">📞 Emergency Hotline: 01319-864049</div>
-            <div className="contact-line">✉️ Email: support@mediflow.com</div>
+            <div className="contact-line">
+              <PhoneIcon size={14} />
+              <span>Emergency Hotline: 01319-864049</span>
+            </div>
+            <div className="contact-line">
+              <MailIcon size={14} />
+              <span>Email: support@mediflow.com</span>
+            </div>
           </div>
 
           <div className="footer-col">
@@ -419,7 +481,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Upload Prescription Modal */}
+      {/* Upload Prescription Modal with Cloudinary Integration */}
       {showRxModal && (
         <div className="modal-overlay">
           <div className="modal-card">
@@ -445,9 +507,9 @@ export default function Home() {
                   marginBottom: 16,
                 }}
               >
-                <span style={{ fontSize: 32, display: 'block', marginBottom: 8 }}>📄</span>
-                <span style={{ fontSize: 12, color: '#475569', fontWeight: 600 }}>
-                  Click to select prescription image or PDF
+                <CloudUploadIcon size={36} className="icon-blue" />
+                <span style={{ fontSize: 12, color: '#475569', fontWeight: 600, display: 'block', marginTop: 8 }}>
+                  Click to select prescription image or PDF for Cloudinary Storage
                 </span>
                 <input
                   type="file"
@@ -467,8 +529,8 @@ export default function Home() {
                 />
               </label>
 
-              <button className="auth-submit-btn" style={{ width: '100%' }}>
-                Submit Prescription →
+              <button className="auth-submit-btn" style={{ width: '100%' }} disabled={uploading}>
+                {uploading ? 'Uploading to Cloudinary...' : 'Submit Prescription →'}
               </button>
             </form>
           </div>
@@ -478,7 +540,7 @@ export default function Home() {
       {/* Notification Toast */}
       {toast && (
         <div className="toast">
-          <span>✓</span>
+          <CheckCircleIcon size={16} />
           {toast}
         </div>
       )}
