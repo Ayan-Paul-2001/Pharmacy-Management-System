@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AnimePharmaHero } from '@/components/AnimePharmaHero'
-import { getDemoSession, getFingerprint, signInWithFirebase, signInWithPasskey } from '@/lib/auth-client'
+import { getDemoSession, getFingerprint, signInWithFirebase, signUpWithFirebase, signInWithPasskey } from '@/lib/auth-client'
 import {
   PhoneIcon,
   MailIcon,
@@ -39,8 +39,8 @@ export default function LoginPage() {
   const [cartCount, setCartCount] = useState(2)
 
   // Login form state
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('ayanpaul.pro@gmail.com')
+  const [password, setPassword] = useState('Admin@owner')
   
   // Signup form state
   const [fullName, setFullName] = useState('')
@@ -61,7 +61,7 @@ export default function LoginPage() {
     getFingerprint().then((fp) => setFingerprintInfo(fp)).catch(() => {})
   }, [])
 
-  function quickFill(presetEmail: string, presetPass: string = 'password123') {
+  function quickFill(presetEmail: string, presetPass: string = 'Admin@owner') {
     setEmail(presetEmail)
     setPassword(presetPass)
     setSignupEmail(presetEmail)
@@ -79,19 +79,21 @@ export default function LoginPage() {
       let result
 
       if (activeTab === 'signup') {
-        const inputEmail = signupEmail || 'user@pharmacy.com'
-        result = getDemoSession(inputEmail)
-        if (fullName) result.user.name = fullName
+        const inputEmail = signupEmail || 'ayanpaul.pro@gmail.com'
+        const inputPass = signupPassword || 'Admin@owner'
+        result = await signUpWithFirebase(inputEmail, inputPass, fullName)
       } else if (authMethod === 'passkey') {
-        result = await signInWithPasskey(email || 'user@pharmacy.com')
+        result = await signInWithPasskey(email || 'ayanpaul.pro@gmail.com')
       } else {
-        result = await signInWithFirebase(email || 'user@pharmacy.com', password || 'password123')
+        result = await signInWithFirebase(email || 'ayanpaul.pro@gmail.com', password || 'Admin@owner')
       }
 
-      // Save session credentials
+      // Save session credentials in localStorage & cookies for Middleware
       localStorage.setItem('mediflow_token', result.accessToken)
       localStorage.setItem('mediflow_user', JSON.stringify(result.user))
       localStorage.setItem('mediflow_fingerprint', fp.visitorId)
+      document.cookie = `mediflow_token=${result.accessToken}; path=/; max-age=86400; SameSite=Lax`
+      document.cookie = `mediflow_user=${encodeURIComponent(JSON.stringify(result.user))}; path=/; max-age=86400; SameSite=Lax`
 
       // Audit Log trigger
       const logs = JSON.parse(localStorage.getItem('mediflow_audit_logs') || '[]')
@@ -109,7 +111,7 @@ export default function LoginPage() {
       // Access granted automatically according to email address
       const targetEmail = (result.user.email || '').toLowerCase()
       const destination =
-        targetEmail.includes('owner') || targetEmail.includes('alex') || targetEmail.includes('admin')
+        targetEmail.includes('owner') || targetEmail.includes('alex') || targetEmail.includes('admin') || targetEmail.includes('ayanpaul')
           ? '/owner/dashboard'
           : targetEmail.includes('employee') || targetEmail.includes('jordan') || targetEmail.includes('staff') || targetEmail.includes('pharmacist')
           ? '/employee/dashboard'
@@ -394,7 +396,7 @@ export default function LoginPage() {
                     {/* Demo Quick Fill Helper Pills */}
                     <div className="demo-autofill-strip">
                       <span className="demo-label">Quick Fill:</span>
-                      <button type="button" onClick={() => quickFill('owner@northstar.com')}>
+                      <button type="button" onClick={() => quickFill('ayanpaul.pro@gmail.com', 'Admin@owner')}>
                         Owner
                       </button>
                       <button type="button" onClick={() => quickFill('staff@northstar.com')}>

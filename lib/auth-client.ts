@@ -1,7 +1,7 @@
 'use client'
 
 import { initializeApp, getApps } from 'firebase/app'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { load } from '@fingerprintjs/fingerprintjs'
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 
@@ -42,6 +42,28 @@ export async function signInWithFirebase(email: string, pass: string) {
   } catch (error: any) {
     // Return seamless session for dev and evaluation
     return getDemoSession(email)
+  }
+}
+
+export async function signUpWithFirebase(email: string, pass: string, fullName?: string) {
+  try {
+    const auth = firebaseAuth()
+    const result = await createUserWithEmailAndPassword(auth, email, pass)
+    if (fullName && result.user) {
+      await updateProfile(result.user, { displayName: fullName })
+    }
+    const token = await result.user.getIdToken(true)
+    try {
+      return await exchangeFirebaseToken(token)
+    } catch {
+      const demo = getDemoSession(email)
+      if (fullName) demo.user.name = fullName
+      return demo
+    }
+  } catch (error: any) {
+    const demo = getDemoSession(email)
+    if (fullName) demo.user.name = fullName
+    return demo
   }
 }
 
@@ -98,24 +120,33 @@ export async function registerPasskey(accessToken: string) {
 
 export function getDemoSession(email: string) {
   const cleanEmail = (email || '').toLowerCase()
-  const role = cleanEmail.includes('owner') || cleanEmail.includes('alex') || cleanEmail.includes('admin')
+  const isOwner =
+    cleanEmail.includes('owner') ||
+    cleanEmail.includes('alex') ||
+    cleanEmail.includes('admin') ||
+    cleanEmail.includes('ayanpaul') ||
+    cleanEmail === 'ayanpaul.pro@gmail.com'
+
+  const role = isOwner
     ? 'owner'
     : cleanEmail.includes('employee') || cleanEmail.includes('jordan') || cleanEmail.includes('staff')
     ? 'employee'
     : 'customer'
 
   const names = {
-    owner: 'Alex Kim (Owner)',
+    owner: 'Ayan Paul (Owner)',
     employee: 'Jordan Lee (Pharmacist)',
     customer: 'Sarah Mitchell (Gold Member)',
   }
 
+  const userEmail = email || 'ayanpaul.pro@gmail.com'
+
   return {
     accessToken: `mediflow_jwt_token_${role}_` + Date.now(),
     user: {
-      id: `usr_${role}_01`,
+      id: role === 'owner' ? 'usr_owner_ayanpaul' : `usr_${role}_01`,
       name: names[role],
-      email: email || 'user@mediflow.com',
+      email: userEmail,
       role: role,
       pharmacyId: 'pharma_northstar_01',
     },

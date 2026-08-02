@@ -75,7 +75,7 @@ export default function ShopPage() {
         </div>
 
         <button className="primary" onClick={() => setShowCheckout(true)} disabled={cart.length === 0}>
-          View Cart ({cart.reduce((a, c) => a + c.qty, 0)}) · ${subtotal.toFixed(2)} <span>→</span>
+          View Cart ({cart.reduce((a, c) => a + c.qty, 0)}) · ৳{subtotal.toFixed(2)} <span>→</span>
         </button>
       </div>
 
@@ -112,7 +112,7 @@ export default function ShopPage() {
             <p>{p.desc}</p>
 
             <div style={{ marginTop: 'auto', paddingTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong style={{ font: '800 18px Manrope', color: '#2563eb' }}>${p.price.toFixed(2)}</strong>
+              <strong style={{ font: '800 18px Manrope', color: '#2563eb' }}>৳{p.price.toFixed(2)}</strong>
               <button className="primary" style={{ padding: '8px 14px', fontSize: 11 }} onClick={() => addToCart(p)}>
                 Add to Cart ＋
               </button>
@@ -138,12 +138,12 @@ export default function ShopPage() {
                     <span>
                       {item.product.name} × {item.qty} {item.product.requiresRx && <strong style={{ color: '#8873d8' }}>(Rx)</strong>}
                     </span>
-                    <b>${(item.product.price * item.qty).toFixed(2)}</b>
+                    <b>৳{(item.product.price * item.qty).toFixed(2)}</b>
                   </div>
                 ))}
                 <div style={{ display: 'flex', justifyContent: 'space-between', font: '800 15px Manrope', marginTop: 10 }}>
                   <span>Total Amount:</span>
-                  <span style={{ color: '#2563eb' }}>${subtotal.toFixed(2)}</span>
+                  <span style={{ color: '#2563eb' }}>৳{subtotal.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -168,7 +168,7 @@ export default function ShopPage() {
               </label>
 
               <button className="primary" style={{ width: '100%' }}>
-                Place Order (${subtotal.toFixed(2)}) <span>→</span>
+                Place Order (৳{subtotal.toFixed(2)}) <span>→</span>
               </button>
             </form>
           </div>
