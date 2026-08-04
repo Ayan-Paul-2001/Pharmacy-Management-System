@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { RoleShell } from '@/components/RoleShell'
 import { getInitialOwnerStore, TransactionItem, MedicineItem } from '@/lib/owner-store'
+import { Download } from 'lucide-react'
 
 export default function OwnerReportsPage() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([])
@@ -41,6 +42,33 @@ export default function OwnerReportsPage() {
     notify('Executive CSV Financial Report exported successfully!')
   }
 
+  function getPaymentBadge(method: string = 'Cash') {
+    const m = method.toLowerCase()
+    let bg = 'rgba(56, 189, 248, 0.15)'
+    let color = '#38bdf8'
+    let border = '1px solid rgba(56, 189, 248, 0.3)'
+
+    if (m.includes('cash')) {
+      bg = 'rgba(52, 211, 153, 0.15)'
+      color = '#34d399'
+      border = '1px solid rgba(52, 211, 153, 0.3)'
+    } else if (m.includes('bkash')) {
+      bg = 'rgba(236, 72, 153, 0.15)'
+      color = '#f472b6'
+      border = '1px solid rgba(236, 72, 153, 0.3)'
+    } else if (m.includes('nagad') || m.includes('rocket')) {
+      bg = 'rgba(251, 191, 36, 0.15)'
+      color = '#fbbf24'
+      border = '1px solid rgba(251, 191, 36, 0.3)'
+    }
+
+    return (
+      <span style={{ background: bg, color: color, border: border, padding: '4px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, display: 'inline-block' }}>
+        {method}
+      </span>
+    )
+  }
+
   return (
     <RoleShell role="owner" title="Executive Financial Analytics">
       <div className="page-intro">
@@ -49,8 +77,9 @@ export default function OwnerReportsPage() {
           <h1>Executive Reports & Analytics</h1>
           <p>Analyze revenue breakdown, gross margin metrics, inventory valuation, and export tax reports.</p>
         </div>
-        <button className="primary" onClick={exportCSVReport}>
-          Export CSV Report <span>↓</span>
+        <button className="primary" onClick={exportCSVReport} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Download size={15} />
+          <span>Export CSV Report</span>
         </button>
       </div>
 
@@ -113,21 +142,21 @@ export default function OwnerReportsPage() {
           {transactions.map((t) => (
             <div className="table-row" key={t.id}>
               <div>
-                <b style={{ color: '#ffffff' }}>{t.id}</b>
-                <div style={{ fontSize: 11, color: '#94a3b8' }}>{t.time}</div>
+                <b style={{ color: '#ffffff', fontSize: 13, display: 'block' }}>{t.id}</b>
+                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>{t.time}</div>
               </div>
 
-              <span>{t.type}</span>
+              <span style={{ color: '#e2e8f0' }}>{t.type}</span>
 
-              <span>{t.customer}</span>
+              <span style={{ color: '#e2e8f0' }}>{t.customer}</span>
 
               <div>
-                <span className="status blue">{t.paymentMethod || 'Cash'}</span>
+                {getPaymentBadge(t.paymentMethod || 'Cash')}
               </div>
 
-              <span>{t.items} items</span>
+              <span style={{ color: '#cbd5e1' }}>{t.items} items</span>
 
-              <span style={{ fontWeight: 700, color: '#34d399' }}>{t.total}</span>
+              <span style={{ fontWeight: 700, color: '#34d399', fontSize: 13 }}>{t.total}</span>
             </div>
           ))}
         </div>

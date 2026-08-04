@@ -300,6 +300,42 @@ export function saveEmployeesStore(employees: EmployeeRecord[]) {
   }
 }
 
+export interface CategoryItem {
+  id: string
+  name: string
+  description: string
+  color: string
+  icon: string
+  itemCount?: number
+}
+
+export const defaultCategories: CategoryItem[] = [
+  { id: 'CAT-1', name: 'Antibiotics', description: 'Anti-bacterial medication & prescription drugs', color: '#38bdf8', icon: 'Pill' },
+  { id: 'CAT-2', name: 'Pain Relief', description: 'Analgesics, antipyretics & anti-inflammatory tablets', color: '#34d399', icon: 'Stethoscope' },
+  { id: 'CAT-3', name: 'Diabetes', description: 'Insulin & blood sugar regulation therapies', color: '#f87171', icon: 'Activity' },
+  { id: 'CAT-4', name: 'Cardiovascular', description: 'Heart, cholesterol & blood pressure medications', color: '#c084fc', icon: 'Heart' },
+  { id: 'CAT-5', name: 'Gastrointestinal', description: 'Antacids, PPIs & digestive health formulations', color: '#fbbf24', icon: 'TestTube' },
+  { id: 'CAT-6', name: 'Supplements', description: 'Multivitamins, minerals & immune boosters', color: '#4ade80', icon: 'Sparkles' },
+]
+
+export function getCategoriesStore(): CategoryItem[] {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('mediflow_categories')
+    if (stored) {
+      try {
+        return JSON.parse(stored)
+      } catch (e) {}
+    }
+  }
+  return defaultCategories
+}
+
+export function saveCategoriesStore(cats: CategoryItem[]) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('mediflow_categories', JSON.stringify(cats))
+  }
+}
+
 export function savePrescriptionsStore(prescriptions: PrescriptionQueueItem[]) {
   if (typeof window !== 'undefined') {
     localStorage.setItem('mediflow_prescriptions_queue', JSON.stringify(prescriptions))

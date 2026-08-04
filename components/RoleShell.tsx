@@ -2,8 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'motion/react'
+import {
+  getInitialOwnerStore,
+  MedicineItem,
+  TransactionItem,
+  PrescriptionQueueItem,
+  CustomerRecord,
+} from '@/lib/owner-store'
 import {
   LayoutDashboard,
   Boxes,
@@ -23,6 +30,9 @@ import {
   MoreHorizontal,
   Search,
   LogOut,
+  Tag,
+  Phone,
+  Mail,
 } from 'lucide-react'
 import {
   getLiveNotifications,
@@ -30,7 +40,6 @@ import {
   markAllNotificationsAsRead,
   clearNotification,
   clearAllNotifications,
-  startLiveSimulation,
   LiveNotification,
 } from '@/lib/notification-store'
 
@@ -46,6 +55,7 @@ const configs = {
     nav: [
       ['Dashboard', '/owner/dashboard'],
       ['Inventory', '/owner/inventory'],
+      ['Categories', '/owner/categories'],
       ['Sales & POS', '/owner/sales'],
       ['Purchases', '/owner/purchases'],
       ['Suppliers', '/owner/suppliers'],
@@ -97,6 +107,8 @@ function getNavIcon(label: string) {
     case 'Inventory':
     case 'Shop medicines':
       return <Boxes size={18} />
+    case 'Categories':
+      return <Tag size={18} />
     case 'Sales & POS':
     case 'Point of sale':
       return <ShoppingCart size={18} />
@@ -137,30 +149,143 @@ export function RoleShell({ role, title, children }: { role: Role; title: string
   const [fbToast, setFbToast] = useState<LiveNotification | null>(null)
   const [toast, setToast] = useState('')
   const [authorized, setAuthorized] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    function loadNotifs() {
-      setNotifications(getLiveNotifications())
-    }
-    loadNotifs()
-
-    function handleNewToast(e: any) {
-      if (e.detail) {
-        setFbToast(e.detail)
-        setTimeout(() => {
-          setFbToast((current) => (current?.id === e.detail.id ? null : current))
-        }, 5500)
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen((prev) => !prev)
+      }
+      if (e.key === 'Escape') {
+        setSearchOpen(false)
       }
     }
-
-    window.addEventListener('mediflow_notifications_changed', loadNotifs)
-    window.addEventListener('mediflow_new_toast', handleNewToast as EventListener)
-
-    return () => {
-      window.removeEventListener('mediflow_notifications_changed', loadNotifs)
-      window.removeEventListener('mediflow_new_toast', handleNewToast as EventListener)
-    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
+
+  const searchResults = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim()
+    const list: Array<{
+      title: string
+      detail: string
+      category: string
+      link: string
+      icon: string
+      badgeBg?: string
+      badgeColor?: string
+    }> = []
+
+    const store = typeof window !== 'undefined' ? getInitialOwnerStore() : null
+
+    // 1. Navigation items
+    c.nav.forEach(([label, href]) => {
+      if (!q || label.toLowerCase().includes(q)) {
+        list.push({
+          title: label,
+          detail: `Navigate to ${label}`,
+          category: 'Navigation',
+          link: href,
+          icon: '🔗',
+          badgeBg: 'rgba(52, 211, 153, 0.15)',
+          badgeColor: '#34d399',
+        })
+      }
+    })
+
+    if (!store) return list
+
+    // 2. Medicines & Catalog (Partial string matching on name, generic, brand, category, barcode, ID)
+    store.medicines.forEach((m: MedicineItem) => {
+      if (
+        !q ||
+        m.name.toLowerCase().includes(q) ||
+        m.genericName.toLowerCase().includes(q) ||
+        m.brand.toLowerCase().includes(q) ||
+        m.category.toLowerCase().includes(q) ||
+        m.barcode.includes(q) ||
+        m.id.toLowerCase().includes(q)
+      ) {
+        list.push({
+          title: m.name,
+          detail: `${m.category} · ৳ ${m.sellingPrice.toFixed(2)} · Stock: ${m.stockQuantity} units (${m.genericName})`,
+          category: 'Medicine',
+          link: role === 'owner' ? '/owner/inventory' : '/employee/inventory',
+          icon: '💊',
+          badgeBg: 'rgba(56, 189, 248, 0.15)',
+          badgeColor: '#38bdf8',
+        })
+      }
+    })
+
+    // 3. Transactions & Invoices (Partial string matching on ID, customer, type, total, payment method)
+    store.transactions.forEach((t: TransactionItem) => {
+      if (
+        !q ||
+        t.id.toLowerCase().includes(q) ||
+        t.customer.toLowerCase().includes(q) ||
+        t.type.toLowerCase().includes(q) ||
+        t.total.toLowerCase().includes(q) ||
+        (t.paymentMethod && t.paymentMethod.toLowerCase().includes(q))
+      ) {
+        list.push({
+          title: `${t.id} - ${t.customer}`,
+          detail: `${t.type} · ${t.total} via ${t.paymentMethod || 'Cash'} (${t.items} items)`,
+          category: 'Invoice',
+          link: role === 'owner' ? '/owner/reports' : '/employee/pos',
+          icon: '🧾',
+          badgeBg: 'rgba(251, 191, 36, 0.15)',
+          badgeColor: '#fbbf24',
+        })
+      }
+    })
+
+    // 4. Doctor Prescriptions (Partial string matching on ID, patient, doctor, medicine, status)
+    store.prescriptions.forEach((rx: PrescriptionQueueItem) => {
+      if (
+        !q ||
+        rx.id.toLowerCase().includes(q) ||
+        rx.patientName.toLowerCase().includes(q) ||
+        rx.doctorName.toLowerCase().includes(q) ||
+        rx.medicineName.toLowerCase().includes(q)
+      ) {
+        list.push({
+          title: `${rx.id} - ${rx.patientName}`,
+          detail: `Prescribed: ${rx.medicineName} by ${rx.doctorName} (${rx.status})`,
+          category: 'Prescription',
+          link: `/${role}/prescriptions`,
+          icon: '📋',
+          badgeBg: 'rgba(167, 139, 250, 0.15)',
+          badgeColor: '#c084fc',
+        })
+      }
+    })
+
+    // 5. Customers (Partial string matching on name, email, phone, tier)
+    store.customers.forEach((cust: CustomerRecord) => {
+      if (
+        !q ||
+        cust.name.toLowerCase().includes(q) ||
+        cust.email.toLowerCase().includes(q) ||
+        cust.phone.includes(q) ||
+        cust.tier.toLowerCase().includes(q)
+      ) {
+        list.push({
+          title: cust.name,
+          detail: `${cust.tier} Member · ${cust.email} · Spent: ৳ ${cust.totalSpent}`,
+          category: 'Customer',
+          link: role === 'owner' ? '/owner/customers' : '/employee/customers',
+          icon: '👤',
+          badgeBg: 'rgba(236, 72, 153, 0.15)',
+          badgeColor: '#f472b6',
+        })
+      }
+    })
+
+    return list.slice(0, 20)
+  }, [searchQuery, role, c.nav])
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
@@ -293,14 +418,42 @@ export function RoleShell({ role, title, children }: { role: Role; title: string
 
       <section className="content">
         {/* Model Pharmacy Top Bar Accent */}
-        <div className="lazz-top-bar" style={{ background: 'linear-gradient(90deg, #0c8542 0%, #059669 100%)', padding: '6px 24px', color: '#fff', fontSize: 11 }}>
+        <div
+          className="lazz-top-bar"
+          style={{
+            background: '#061224',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            padding: '7px 28px',
+            color: '#cbd5e1',
+            fontSize: 11.5,
+            fontWeight: 500,
+          }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-              <span>📞 Hotline: 01319-864049 / 01952-444471</span>
-              <span>|</span>
-              <span>✉ support@mediflow.com</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#e2e8f0' }}>
+                <Phone size={13} style={{ color: '#34d399' }} />
+                <span>Hotline: <strong style={{ color: '#ffffff', fontWeight: 600 }}>01319-864049 / 01952-444471</strong></span>
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#e2e8f0' }}>
+                <Mail size={13} style={{ color: '#38bdf8' }} />
+                <span>support@mediflow.com</span>
+              </span>
             </div>
-            <span className="model-pharmacy-badge" style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: 'none', fontSize: 10, padding: '2px 8px', borderRadius: 10 }}>
+            <span
+              className="model-pharmacy-badge"
+              style={{
+                background: 'rgba(12, 133, 66, 0.2)',
+                color: '#34d399',
+                border: '1px solid rgba(52, 211, 153, 0.35)',
+                fontSize: 10.5,
+                fontWeight: 700,
+                padding: '3px 12px',
+                borderRadius: 12,
+                letterSpacing: '0.3px',
+              }}
+            >
               First Ever Model Pharmacy System in Bangladesh
             </span>
           </div>
@@ -313,11 +466,117 @@ export function RoleShell({ role, title, children }: { role: Role; title: string
             <strong>{title}</strong>
           </div>
           <div className="top-actions">
-            <label className="search">
-              <Search size={14} />
-              <input placeholder="Search medicines, orders, invoices..." />
-              <kbd>⌘ K</kbd>
-            </label>
+            <div style={{ position: 'relative' }}>
+              <label className="search" style={{ position: 'relative', width: 280 }}>
+                <Search size={14} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value)
+                    setSearchOpen(true)
+                  }}
+                  onFocus={() => setSearchOpen(true)}
+                  onBlur={() => setTimeout(() => setSearchOpen(false), 220)}
+                  placeholder="Search medicines, orders, invoices..."
+                />
+                {searchQuery ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSearchQuery('')
+                      setSearchOpen(false)
+                    }}
+                    style={{ background: 'transparent', border: 0, color: '#94a3b8', fontSize: 14, cursor: 'pointer', padding: 0 }}
+                  >
+                    ×
+                  </button>
+                ) : (
+                  <kbd>⌘ K</kbd>
+                )}
+              </label>
+
+              {/* Inline Partial Search Dropdown Results */}
+              {searchOpen && searchQuery.trim() && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 42,
+                    left: 0,
+                    width: 420,
+                    maxHeight: 380,
+                    overflowY: 'auto',
+                    background: '#0a1728',
+                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                    borderRadius: 14,
+                    padding: '8px 10px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.85), 0 0 20px rgba(56, 189, 248, 0.2)',
+                    zIndex: 9999,
+                  }}
+                >
+                  {searchResults.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '24px 0', color: '#64748b', fontSize: 12 }}>
+                      No matching results for "{searchQuery}"
+                    </div>
+                  ) : (
+                    searchResults.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          setSearchOpen(false)
+                          setSearchQuery('')
+                          if (item.link) window.location.href = item.link
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '9px 11px',
+                          borderRadius: 10,
+                          cursor: 'pointer',
+                          marginBottom: 4,
+                          background: 'rgba(255,255,255,0.03)',
+                          border: '1px solid rgba(255,255,255,0.06)',
+                          transition: 'all 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(56, 189, 248, 0.15)'
+                          e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.4)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
+                          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, overflow: 'hidden' }}>
+                          <span style={{ fontSize: 16, flexShrink: 0 }}>{item.icon}</span>
+                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            <b style={{ color: '#ffffff', fontSize: 12, display: 'block' }}>{item.title}</b>
+                            <span style={{ color: '#94a3b8', fontSize: 10 }}>{item.detail}</span>
+                          </div>
+                        </div>
+
+                        <span
+                          style={{
+                            fontSize: 9,
+                            fontWeight: 700,
+                            padding: '2px 6px',
+                            borderRadius: 4,
+                            background: item.badgeBg || 'rgba(56,189,248,0.15)',
+                            color: item.badgeColor || '#38bdf8',
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0,
+                            marginLeft: 8,
+                          }}
+                        >
+                          {item.category}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
             <a
               href="https://wa.me/8801952444471"
               target="_blank"
@@ -527,10 +786,16 @@ export function RoleShell({ role, title, children }: { role: Role; title: string
         <div className="profile-pop">
           <div className={`avatar ${c.accent}`}>{c.initials}</div>
           <b>{role === 'customer' ? 'Sarah Mitchell' : role === 'employee' ? 'Jordan Lee' : 'Ayan Paul'}</b>
-          <span>{role === 'customer' ? 'sarah.mitchell@email.com' : 'Signed in securely'}</span>
+          <span>{role === 'customer' ? 'sarah.mitchell@email.com' : role === 'employee' ? 'jordan.lee@northstar.com' : 'ayanpaul.pro@gmail.com'}</span>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#34d399', background: 'rgba(52, 211, 153, 0.12)', padding: '2px 8px', borderRadius: 10, marginTop: 6, display: 'inline-block' }}>
+            🔒 {c.role}
+          </div>
           <hr />
-          <button onClick={() => notify('Account settings opened')}>Account Settings</button>
-          <button onClick={handleSignOut} style={{ color: '#de6870', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <button onClick={() => { setProfile(false); window.location.href = role === 'owner' ? '/owner/settings' : role === 'employee' ? '/employee/settings' : '/customer/profile'; }}>
+            <Settings size={14} />
+            <span>Account Settings</span>
+          </button>
+          <button className="signout-btn" onClick={handleSignOut}>
             <LogOut size={14} />
             <span>Sign Out</span>
           </button>

@@ -1,5 +1,7 @@
-import InventoryPage from '@/app/inventory/page'
+'use client'
+
+import OwnerInventoryPage from '../../owner/inventory/page'
 
 export default function EmployeeInventoryPage() {
-  return <InventoryPage />
+  return <OwnerInventoryPage />
 }

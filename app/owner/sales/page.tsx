@@ -6,8 +6,10 @@ import {
   getInitialOwnerStore,
   saveMedicinesStore,
   saveTransactionsStore,
+  getCategoriesStore,
   MedicineItem,
   TransactionItem,
+  CategoryItem,
 } from '@/lib/owner-store'
 import { addLiveNotification } from '@/lib/notification-store'
 import {
@@ -29,6 +31,7 @@ interface CartItem extends MedicineItem {
 
 export default function OwnerSalesPage() {
   const [products, setProducts] = useState<MedicineItem[]>([])
+  const [categories, setCategories] = useState<CategoryItem[]>([])
   const [transactions, setTransactions] = useState<TransactionItem[]>([])
   const [cart, setCart] = useState<CartItem[]>([])
   const [search, setSearch] = useState('')
@@ -43,12 +46,20 @@ export default function OwnerSalesPage() {
     const store = getInitialOwnerStore()
     setProducts(store.medicines)
     setTransactions(store.transactions)
+    setCategories(getCategoriesStore())
+
     if (store.medicines.length > 1) {
       setCart([
         { ...store.medicines[0], qty: 1 },
         { ...store.medicines[1], qty: 2 },
       ])
     }
+
+    function handleCatsChanged() {
+      setCategories(getCategoriesStore())
+    }
+    window.addEventListener('mediflow_categories_changed', handleCatsChanged)
+    return () => window.removeEventListener('mediflow_categories_changed', handleCatsChanged)
   }, [])
 
   function notify(msg: string) {
@@ -219,9 +230,12 @@ export default function OwnerSalesPage() {
           </div>
 
           <div className="category-row">
-            {['All', 'Antibiotics', 'Pain Relief', 'Diabetes', 'Gastrointestinal', 'Cardiovascular', 'Supplements'].map((cat) => (
-              <button key={cat} className={activeCategory === cat ? 'active' : ''} onClick={() => setActiveCategory(cat)}>
-                {cat}
+            <button className={activeCategory === 'All' ? 'active' : ''} onClick={() => setActiveCategory('All')}>
+              All
+            </button>
+            {categories.map((c) => (
+              <button key={c.id} className={activeCategory === c.name ? 'active' : ''} onClick={() => setActiveCategory(c.name)}>
+                {c.name}
               </button>
             ))}
           </div>
