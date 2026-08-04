@@ -118,46 +118,7 @@ export function clearAllNotifications() {
   saveLiveNotifications([])
 }
 
-// Background Live Simulation (Facebook-Style Periodic Notifications)
-const simulatedEvents = [
-  {
-    title: '🛒 Live POS Counter Sale',
-    detail: 'Cashier Ayan Paul billed 2x Paracetamol 500mg (Invoice INV-' + Math.floor(1000 + Math.random() * 9000) + ') for ৳ 9.60.',
-    type: 'mint' as const,
-    link: '/owner/sales',
-    avatarIcon: '🛒',
-  },
-  {
-    title: '⚠️ Automatic Low Stock Warning',
-    detail: 'Atorvastatin 20mg Tablet stock dropped to 10 units. Reorder recommended.',
-    type: 'amber' as const,
-    link: '/owner/inventory',
-    avatarIcon: '📦',
-  },
-  {
-    title: '📋 Prescription Order Verified',
-    detail: 'Doctor Prescription RX-' + Math.floor(100 + Math.random() * 900) + ' approved for dispensing.',
-    type: 'blue' as const,
-    link: '/owner/prescriptions',
-    avatarIcon: '💊',
-  },
-  {
-    title: '💳 bKash Payment Received',
-    detail: 'Customer online order #ORD-8822 paid ৳ 1,240.00 via bKash Merchant API.',
-    type: 'mint' as const,
-    link: '/owner/reports',
-    avatarIcon: '📱',
-  },
-]
-
-let simulationStarted = false
-
+// Background Live Simulation (Disabled - automatic simulated notifications turned off)
 export function startLiveSimulation() {
-  if (typeof window === 'undefined' || simulationStarted) return
-  simulationStarted = true
-
-  setInterval(() => {
-    const randomEvent = simulatedEvents[Math.floor(Math.random() * simulatedEvents.length)]
-    addLiveNotification(randomEvent)
-  }, 22000) // Trigger realistic notification every 22 seconds
+  // Automatic periodic notification simulation disabled as requested
 }

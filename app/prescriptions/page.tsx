@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { RoleShell } from '@/components/RoleShell'
 
+import { addLiveNotification } from '@/lib/notification-store'
+
 interface PrescriptionItem {
   id: string
   customerName: string
@@ -32,15 +34,33 @@ export default function PrescriptionsPage() {
   }
 
   function handleApprove(id: string) {
+    const rx = rxList.find((r) => r.id === id)
     setRxList(rxList.map((r) => (r.id === id ? { ...r, status: 'Approved' } : r)))
     notify(`Approved prescription ${id}`)
     setViewingRx(null)
+
+    addLiveNotification({
+      title: '✓ Prescription Verified',
+      detail: `Prescription ${id} for ${rx?.customerName || 'patient'} approved for dispensing.`,
+      type: 'mint',
+      link: '/customer/prescriptions',
+      avatarIcon: '💊',
+    })
   }
 
   function handleReject(id: string) {
+    const rx = rxList.find((r) => r.id === id)
     setRxList(rxList.map((r) => (r.id === id ? { ...r, status: 'Rejected' } : r)))
     notify(`Rejected prescription ${id}`)
     setViewingRx(null)
+
+    addLiveNotification({
+      title: '⚠️ Prescription Rejected',
+      detail: `Prescription ${id} for ${rx?.customerName || 'patient'} was rejected.`,
+      type: 'amber',
+      link: '/customer/prescriptions',
+      avatarIcon: '💊',
+    })
   }
 
   return (

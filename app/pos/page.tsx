@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ModuleShell } from '@/components/ModuleShell'
+import { addLiveNotification } from '@/lib/notification-store'
 
 interface POSProduct {
   id: string
@@ -97,6 +98,15 @@ export default function POSPage() {
 
     setLastInvoice(invoice)
     setShowReceipt(true)
+
+    // Trigger real-time notification
+    addLiveNotification({
+      title: '✓ POS Counter Sale',
+      detail: `Walk-in sale ${invoice.invoiceNo} billed for ৳ ${grandTotal.toFixed(2)} via ${paymentMethod}.`,
+      type: 'mint',
+      link: '/owner/reports',
+      avatarIcon: '🛒',
+    })
 
     // Save to audit log
     const logs = JSON.parse(localStorage.getItem('mediflow_audit_logs') || '[]')

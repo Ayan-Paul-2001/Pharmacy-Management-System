@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { RoleShell } from '@/components/RoleShell'
 import { uploadImageToCloudinary } from '@/lib/cloudinary-client'
 
+import { addLiveNotification } from '@/lib/notification-store'
+
 export default function CustomerPrescriptionsPage() {
   const [prescriptions, setPrescriptions] = useState([
     { id: 'RX-901', doctor: 'Dr. Arthur Pendelton, MD', date: '2026-07-27', medicine: 'Amoxicillin 500mg', status: 'Approved', url: 'https://res.cloudinary.com/demo/image/upload/v1680000000/mediflow/cld_rx_demo.png' },
@@ -44,6 +46,15 @@ export default function CustomerPrescriptionsPage() {
       }
 
       setPrescriptions([newRx, ...prescriptions])
+
+      addLiveNotification({
+        title: '📋 Prescription Uploaded',
+        detail: `Sarah Mitchell uploaded doctor prescription ${newRx.id} for ${newRx.medicine}.`,
+        type: 'blue',
+        link: '/owner/prescriptions',
+        avatarIcon: '💊',
+      })
+
       notify('✓ Prescription uploaded to Cloudinary! Pending pharmacist verification.')
       setShowUpload(false)
       setDocName('')

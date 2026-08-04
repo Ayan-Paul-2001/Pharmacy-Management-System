@@ -144,9 +144,6 @@ export function RoleShell({ role, title, children }: { role: Role; title: string
     }
     loadNotifs()
 
-    // Start background live simulation engine
-    startLiveSimulation()
-
     function handleNewToast(e: any) {
       if (e.detail) {
         setFbToast(e.detail)
